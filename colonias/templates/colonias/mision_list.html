@@ -1,0 +1,63 @@
+{% extends "colonias/base.html" %}
+
+{% block title %}Misiones | Galactic Manager{% endblock %}
+
+{% block content %}
+<h1>Listado de misiones</h1>
+
+<p>
+    <a href="{% url 'colonias:mision_create' %}">Nueva mision</a>
+    <a href="{% url 'colonias:planeta_list' %}">Ver planetas</a>
+    <a href="{% url 'colonias:colonia_list' %}">Ver colonias</a>
+</p>
+
+<form method="get">
+    <label>
+        Buscar mision
+        <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Titulo">
+    </label>
+    <label>
+        Estado
+        <select name="estado">
+            <option value="">Todos</option>
+            {% for valor, etiqueta in estados %}
+                <option value="{{ valor }}" {% if request.GET.estado == valor %}selected{% endif %}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <button type="submit">Filtrar</button>
+    <a href="{% url 'colonias:mision_list' %}">Limpiar</a>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Colonia</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for mision in misiones %}
+            <tr>
+                <td><a href="{% url 'colonias:mision_detail' mision.pk %}">{{ mision.titulo }}</a></td>
+                <td>{{ mision.colonia.nombre }}</td>
+                <td>{{ mision.fecha }}</td>
+                <td>{{ mision.get_estado_display }}</td>
+                <td>
+                    <a href="{% url 'colonias:mision_update' mision.pk %}">Editar</a>
+                    <a href="{% url 'colonias:mision_delete' mision.pk %}">Borrar</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No se encontraron misiones.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% include "colonias/pagination.html" %}
+{% endblock %}

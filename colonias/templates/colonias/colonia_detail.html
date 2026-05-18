@@ -1,0 +1,36 @@
+{% extends "colonias/base.html" %}
+
+{% block title %}{{ colonia.nombre }} | Galactic Manager{% endblock %}
+
+{% block content %}
+<h1>{{ colonia.nombre }}</h1>
+
+<p>
+    <a href="{% url 'colonias:colonia_update' colonia.pk %}">Editar</a>
+    <a href="{% url 'colonias:colonia_delete' colonia.pk %}">Borrar</a>
+    <a href="{% url 'colonias:colonia_list' %}">Volver al listado</a>
+</p>
+
+<h2>Datos principales</h2>
+<dl>
+    <dt>Planeta</dt>
+    <dd>{{ colonia.planeta.nombre }}</dd>
+    <dt>Poblacion</dt>
+    <dd>{{ colonia.poblacion }}</dd>
+    <dt>Fecha de fundacion</dt>
+    <dd>{{ colonia.fecha_fundacion }}</dd>
+</dl>
+
+<h2>Misiones asociadas</h2>
+<p><a href="{% url 'colonias:mision_create' %}">Nueva mision</a></p>
+<ul>
+    {% for mision in colonia.misiones.all %}
+        <li>
+            <a href="{% url 'colonias:mision_detail' mision.pk %}">{{ mision.titulo }}</a>
+            ({{ mision.get_estado_display }})
+        </li>
+    {% empty %}
+        <li>Esta colonia aun no tiene misiones.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

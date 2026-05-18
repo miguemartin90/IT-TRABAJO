@@ -1,0 +1,36 @@
+{% extends "colonias/base.html" %}
+
+{% block title %}{{ planeta.nombre }} | Galactic Manager{% endblock %}
+
+{% block content %}
+<h1>{{ planeta.nombre }}</h1>
+
+<p>
+    <a href="{% url 'colonias:planeta_update' planeta.pk %}">Editar</a>
+    <a href="{% url 'colonias:planeta_delete' planeta.pk %}">Borrar</a>
+    <a href="{% url 'colonias:planeta_list' %}">Volver al listado</a>
+</p>
+
+<h2>Datos principales</h2>
+<dl>
+    <dt>Tipo</dt>
+    <dd>{{ planeta.tipo }}</dd>
+    <dt>Distancia</dt>
+    <dd>{{ planeta.distancia }}</dd>
+    <dt>Colonias</dt>
+    <dd>{{ planeta.colonias.count }}</dd>
+</dl>
+
+<h2>Colonias asociadas</h2>
+<p><a href="{% url 'colonias:colonia_create' %}">Nueva colonia</a></p>
+<ul>
+    {% for colonia in planeta.colonias.all %}
+        <li>
+            <a href="{% url 'colonias:colonia_detail' colonia.pk %}">{{ colonia.nombre }}</a>
+            ({{ colonia.poblacion }} habitantes)
+        </li>
+    {% empty %}
+        <li>Este planeta aun no tiene colonias.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

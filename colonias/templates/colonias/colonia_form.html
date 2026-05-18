@@ -1,0 +1,14 @@
+{% extends "colonias/base.html" %}
+
+{% block title %}{% if object %}Editar colonia{% else %}Nueva colonia{% endif %} | Galactic Manager{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Editar colonia{% else %}Nueva colonia{% endif %}</h1>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% include "colonias/form_fields.html" %}
+    <button type="submit">Guardar</button>
+    <a href="{% if object %}{% url 'colonias:colonia_detail' object.pk %}{% else %}{% url 'colonias:colonia_list' %}{% endif %}">Cancelar</a>
+</form>
+{% endblock %}
