@@ -51,4 +51,7 @@ urlpatterns = [
         views.MisionDeleteView.as_view(),
         name="mision_delete",
     ),
+
+    path("register/", views.RegistroView.as_view(), name="register"
+    ),
 ]
