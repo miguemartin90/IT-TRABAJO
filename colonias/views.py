@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -14,6 +15,10 @@ from django.views.generic import (
 from .forms import ColoniaForm, MisionForm, PlanetaForm
 from .models import Colonia, Informe, Mision, Planeta
 
+def inicio(request):
+    if request.method == 'POST':
+        return redirect('colonias:colonia_list')
+    return render(request, 'colonias/inicio.html')
 
 class PlanetaListView(ListView):
     model = Planeta

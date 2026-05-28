@@ -1,0 +1,32 @@
+{% extends 'colonias/base.html' %}
+
+{% block title %}Inicio | Galactic Manager{% endblock %}
+
+{% block content %}
+<div class="login-wrap">
+    <div class="login-card">
+
+        <h1>Acceso</h1>
+        <p class="subtitle">Identificación de tripulación</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="id_username">Usuario</label>
+                <input type="text" id="id_username" name="username" placeholder="Tu nombre de usuario">
+            </div>
+
+            <div class="form-group">
+                <label for="id_password">Contraseña</label>
+                <input type="password" id="id_password" name="password" placeholder="••••••••">
+            </div>
+
+            <div class="login-actions">
+                <button type="submit" class="btn-space primary">Entrar</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

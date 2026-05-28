@@ -3,52 +3,59 @@
 {% block title %}Colonias | Galactic Manager{% endblock %}
 
 {% block content %}
-<h1>Listado de colonias</h1>
 
-<p>
-    <a href="{% url 'colonias:colonia_create' %}">Nueva colonia</a>
-    <a href="{% url 'colonias:planeta_list' %}">Ver planetas</a>
-    <a href="{% url 'colonias:mision_list' %}">Ver misiones</a>
-</p>
+<div class="space-header">
+    <h1>Colonias</h1>
+    <div class="header-actions">
+        <a href="{% url 'colonias:colonia_create' %}" class="btn-space primary">+ Nueva colonia</a>
+    </div>
+</div>
 
-<form method="get">
+<form method="get" class="space-filter">
     <label>
-        Buscar colonia
-        <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Nombre">
+        Buscar
+        <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Nombre de colonia…">
     </label>
-    <button type="submit">Buscar</button>
-    <a href="{% url 'colonias:colonia_list' %}">Limpiar</a>
+    <button type="submit" class="btn-space secondary">Buscar</button>
+    <a href="{% url 'colonias:colonia_list' %}" class="btn-space ghost">Limpiar</a>
 </form>
 
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Planeta</th>
-            <th>Poblacion</th>
-            <th>Fundacion</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for colonia in colonias %}
+<div class="space-table-wrap">
+    <table class="space-table">
+        <thead>
             <tr>
-                <td><a href="{% url 'colonias:colonia_detail' colonia.pk %}">{{ colonia.nombre }}</a></td>
-                <td>{{ colonia.planeta.nombre }}</td>
-                <td>{{ colonia.poblacion }}</td>
-                <td>{{ colonia.fecha_fundacion }}</td>
-                <td>
-                    <a href="{% url 'colonias:colonia_update' colonia.pk %}">Editar</a>
-                    <a href="{% url 'colonias:colonia_delete' colonia.pk %}">Borrar</a>
-                </td>
+                <th>Nombre</th>
+                <th>Planeta</th>
+                <th>Población</th>
+                <th>Fundación</th>
+                <th>Acciones</th>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5">No se encontraron colonias.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for colonia in colonias %}
+                <tr>
+                    <td>
+                        <a href="{% url 'colonias:colonia_detail' colonia.pk %}">{{ colonia.nombre }}</a>
+                    </td>
+                    <td>{{ colonia.planeta.nombre }}</td>
+                    <td>{{ colonia.poblacion|floatformat:"0" }}</td>
+                    <td>{{ colonia.fecha_fundacion }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'colonias:colonia_update' colonia.pk %}" class="btn-space ghost">Editar</a>
+                            <a href="{% url 'colonias:colonia_delete' colonia.pk %}" class="btn-space danger">Borrar</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty">No se encontraron colonias.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% include "colonias/pagination.html" %}
+
 {% endblock %}
