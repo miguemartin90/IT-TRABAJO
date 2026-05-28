@@ -3,52 +3,61 @@
 {% block title %}Planetas | Galactic Manager{% endblock %}
 
 {% block content %}
-<h1>Listado de planetas</h1>
 
-<p>
-    <a href="{% url 'colonias:planeta_create' %}">Nuevo planeta</a>
-    <a href="{% url 'colonias:colonia_list' %}">Ver colonias</a>
-    <a href="{% url 'colonias:mision_list' %}">Ver misiones</a>
-</p>
+<div class="space-header">
+    <h1>Planetas</h1>
+    <div class="header-actions">
+        <a href="{% url 'colonias:planeta_create' %}" class="btn-space primary">+ Nuevo planeta</a>
+    </div>
+</div>
 
-<form method="get">
+<form method="get" class="space-filter">
     <label>
-        Buscar planeta
-        <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Nombre o tipo">
+        Buscar
+        <input type="search" name="q" value="{{ request.GET.q }}" placeholder="Nombre o tipo…">
     </label>
-    <button type="submit">Buscar</button>
-    <a href="{% url 'colonias:planeta_list' %}">Limpiar</a>
+    <button type="submit" class="btn-space secondary">Buscar</button>
+    <a href="{% url 'colonias:planeta_list' %}" class="btn-space ghost">Limpiar</a>
 </form>
 
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Tipo</th>
-            <th>Distancia</th>
-            <th>Colonias</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for planeta in planetas %}
+<div class="space-table-wrap">
+    <table class="space-table">
+        <thead>
             <tr>
-                <td><a href="{% url 'colonias:planeta_detail' planeta.pk %}">{{ planeta.nombre }}</a></td>
-                <td>{{ planeta.tipo }}</td>
-                <td>{{ planeta.distancia }}</td>
-                <td>{{ planeta.colonias.count }}</td>
-                <td>
-                    <a href="{% url 'colonias:planeta_update' planeta.pk %}">Editar</a>
-                    <a href="{% url 'colonias:planeta_delete' planeta.pk %}">Borrar</a>
-                </td>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Distancia</th>
+                <th>Colonias</th>
+                <th>Acciones</th>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5">No se encontraron planetas.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {% for planeta in planetas %}
+                <tr>
+                    <td>
+                        <a href="{% url 'colonias:planeta_detail' planeta.pk %}">
+                            {{ planeta.nombre }}
+                        </a>
+                    </td>
+                    <td>{{ planeta.tipo }}</td>
+                    <td>{{ planeta.distancia }}</td>
+                    <td>{{ planeta.colonias.count }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'colonias:planeta_update' planeta.pk %}" class="btn-space ghost">Editar</a>
+                            <a href="{% url 'colonias:planeta_delete' planeta.pk %}" class="btn-space danger">Borrar</a>
+                        </div>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" class="empty">No se encontraron planetas.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 {% include "colonias/pagination.html" %}
+
 {% endblock %}

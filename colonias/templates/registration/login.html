@@ -1,38 +1,107 @@
-{% extends "colonias/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso al Sistema Galáctico</title>
+    <link rel="stylesheet" href="{% static 'colonias/css/space.css' %}">
+    <style>
+        .emergency-nav {
+            background-color: #0b0e14;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #00ffcc;
+            font-family: Arial, sans-serif;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #111622;
+            border: 1px solid #00ffcc;
+            border-radius: 8px;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .btn-submit {
+            background-color: #00ffcc;
+            color: #0b0e14;
+            border: none;
+            padding: 10px 20px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            background: #1a2333;
+            border: 1px solid #00ffcc;
+            color: white;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body style="background-color: #0b0e14; margin: 0; padding: 0;">
 
-{% block title %}Entrar | Galactic Manager{% endblock %}
-
-{% block content %}
-<h1>Iniciar sesion</h1>
-
-<form method="post">
-    {% csrf_token %}
-
-    {% if form.non_field_errors %}
+    <nav class="emergency-nav">
+        <span style="color: #00ffcc; font-weight: bold; font-size: 18px;">🚀 GALACTIC MANAGER (AUTENTICACIÓN)</span>
         <div>
-            {{ form.non_field_errors }}
+            {% if user.is_authenticated %}
+                <span style="color: #fff; margin-right: 15px;">Tripulante activo: <strong>{{ user.username }}</strong></span>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Cerrar Sesión</button>
+                </form>
+            {% else %}
+                <span style="color: #ff3333;">🔒 Modo: Invitado (No autenticado)</span>
+            {% endif %}
         </div>
-    {% endif %}
+    </nav>
 
-    <p>
-        <label for="{{ form.username.id_for_label }}">Usuario</label>
-        {{ form.username }}
-        {% for error in form.username.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    </p>
+    <div class="login-container">
+        {% if user.is_authenticated %}
+            <h2 style="color: #00ffcc; text-align: center;">¡Ya estás dentro!</h2>
+            <p style="text-align: center;">Tu sesión está activa en los sistemas centrales.</p>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="{% url 'colonias:colonia_list' %}" style="color: #00ffcc; text-decoration: none; border: 1px solid #00ffcc; padding: 10px; border-radius: 4px; display: inline-block;">
+                    Ir al panel de Colonias 🛰️
+                </a>
+            </div>
+        {% else %}
+            <h2 style="text-align: center; color: #00ffcc;">Identificación de la Tripulación</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Usuario Galáctico:</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Código de Acceso:</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-submit">Sincronizar Panel</button>
+            </form>
+        {% endif %}
+    </div>
 
-    <p>
-        <label for="{{ form.password.id_for_label }}">Contrasena</label>
-        {{ form.password }}
-        {% for error in form.password.errors %}
-            <span>{{ error }}</span>
-        {% endfor %}
-    </p>
-
-    <input type="hidden" name="next" value="{{ next }}">
-
-    <button type="submit">Entrar</button>
-    <a href="{% url 'colonias:colonia_list' %}">Cancelar</a>
-</form>
-{% endblock %}
+</body>
+</html>

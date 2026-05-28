@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse, reverse_lazy
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -13,7 +14,14 @@ from django.views.generic import (
 
 from .forms import ColoniaForm, MisionForm, PlanetaForm
 from .models import Colonia, Informe, Mision, Planeta
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
+def inicio(request):
+    if request.method == 'POST':
+        return redirect('colonias:colonia_list')
+    return render(request, 'colonias/inicio.html')
 
 class PlanetaListView(ListView):
     model = Planeta
@@ -203,3 +211,35 @@ class MisionDeleteView(LoginRequiredMixin, DeleteView):
     def form_valid(self, form):
         messages.success(self.request, "Mision eliminada correctamente.")
         return super().form_valid(form)
+
+
+class RegistroView(CreateView):
+    form_class = UserCreationForm
+    template_name = "registration/register.html"
+    success_url = reverse_lazy("login")
+
+import requests
+from django.shortcuts import render
+
+
+def inicio_galactico(request):
+    url_nasa = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY"
+
+    datos_nasa = {
+        "title": "Exploración Espacial Activa",
+        "url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000",
+        "media_type": "image",
+        "explanation": "El centro de mando está operativo. Conexión externa con la NASA en modo de simulación.",
+    }
+
+    try:
+        response = requests.get(url_nasa, timeout=2, verify=False)
+        if response.status_code == 200:
+            json_data = response.json()
+            if "url" in json_data and "title" in json_data:
+                datos_nasa = json_data
+    except Exception:
+        pass
+
+    # 🔴 CAMBIA ESTO EXACTAMENTE: Añade 'colonias/' antes de inicio.html
+    return render(request, "colonias/inicio.html", {"nasa": datos_nasa})
