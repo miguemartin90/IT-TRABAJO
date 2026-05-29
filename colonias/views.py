@@ -241,5 +241,5 @@ def inicio_galactico(request):
     except Exception:
         pass
 
-    # 🔴 CAMBIA ESTO EXACTAMENTE: Añade 'colonias/' antes de inicio.html
+    
     return render(request, "colonias/inicio.html", {"nasa": datos_nasa})

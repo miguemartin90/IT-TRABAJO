@@ -58,7 +58,7 @@
 
             <div class="user-space-zone">
                 {% if user.is_authenticated %}
-                    <span style="color: #00ffcc;">🚀 Tripulante: <strong>{{ user.username }}</strong></span>
+                    <span style="color: #00ffcc;"> Tripulante: <strong>{{ user.username }}</strong></span>
                     <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0;">
                         {% csrf_token %}
                         <button type="submit" class="btn-logout">
@@ -72,7 +72,7 @@
         </nav>
         <div style="display: flex; align-items: center; gap: 15px; margin-left: auto; padding-left: 20px; font-family: Arial, sans-serif;">
             {% if user.is_authenticated %}
-                <span style="color: #00ffcc; font-weight: bold;">🚀 Tripulante: {{ user.username }}</span>
+                <span style="color: #00ffcc; font-weight: bold;"> Tripulante: {{ user.username }}</span>
                 <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0; padding: 0;">
                     {% csrf_token %}
                     <button type="submit" style="background-color: #dc3545; color: white; border: none; padding: 6px 12px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 14px;">
